@@ -1,0 +1,32 @@
+{
+  "name": "google-meet-headless-joiner",
+  "version": "1.0.0",
+  "description": "Autojoin Google Meetings headless ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adnit/Google-Meet-Headless-Joiner.git"
+  },
+  "keywords": [
+    "google",
+    "meet",
+    "headless"
+  ],
+  "author": "Adnit Kamberi",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "googleapis": "^39.2.0",
+    "nodemon": "^2.0.4",
+    "puppeteer": "^5.3.1",
+    "puppeteer-extra": "^3.1.15",
+    "puppeteer-extra-plugin-stealth": "^2.6.1"
+  },
+  "bugs": {
+    "url": "https://github.com/adnit/Google-Meet-Headless-Joiner/issues"
+  },
+  "homepage": "https://github.com/adnit/Google-Meet-Headless-Joiner#readme"
+}
