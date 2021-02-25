@@ -1,8 +1,9 @@
 # Google-Meet-Headless-Joiner
 
-#### Join your google meet events automatically headless
+#### Bot that pulls events from your Google Calender, joins and leaves them automatically.
 
-### Guide
+
+### Usage guide
 
 1. Clone the repo,
 2. Rename `.env-example` to `.env` and replace it with email and password,
@@ -19,3 +20,9 @@ The first time you run the sample, it will prompt you to authorize access:
 - Copy the code you're given, paste it into the command-line prompt, and press `Enter`.
 
 Part of this bot is based on this repository\(joining the meetings and leaving them\) https://github.com/AmanRaj1608/Google-Meet-Scheduler
+
+## License
+
+MIT
+
+**Free Software, Hell Yeah!**
