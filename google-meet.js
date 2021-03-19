@@ -3,16 +3,19 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
+// const WELCOMING_MESSAGE = 'Pershendetje'
+
 puppeteer.use(StealthPlugin());
 
 class GoogleMeet {
-  constructor(email, pass, headless, strict) {
+  constructor(email, pass, headless, strict, message) {
     this.email = email;
     this.pass = pass;
     this.headless = headless;
     this.strict = strict;
     this.browser;
     this.page;
+    this.message = message;
   }
   async schedule(url) {
     try {
@@ -85,6 +88,15 @@ class GoogleMeet {
       await this.page.click('span.NPEfkd.RveJvd.snByac');
 
       console.log('Successfully joined/Sent join request');
+
+      await this.page.waitForTimeout(5000);
+      await this.page.click('div.HKarue');
+      await this.page.waitForTimeout(1000);
+      await this.page.click('div.Pc9Gce.Wic03c');
+      if(this.message.length > 1){
+        await this.page.keyboard.type(this.message,{delay:214})
+        await this.page.keyboard.press('Enter')
+        console.log('Welcoming message sent in chat') }
     } catch (err) {
       console.log(err);
     }

@@ -7,11 +7,13 @@ const { setInterval } = require('timers');
 
 let email = process.env.EMAIL;
 let password = process.env.PASSWORD;
-
-let headless = false;
 let strict = true;
+let headless = true;
 
-obj = new GoogleMeet(email, password, headless, strict);
+// edit this to add a welcoming message everytime you join a meeting
+let message = '' // for ex. Hello everyone
+
+obj = new GoogleMeet(email, password, headless, strict, message);
 
 let url = {};
 let ind = 0;
@@ -84,7 +86,7 @@ function listEvents(auth) {
           const start = event.start.dateTime || event.start.date;
           const end = event.end.dateTime || event.start.date;
           let startUTC = new Date(start).toDateString();
-          console.log(`${startUTC} | ${event.summary} | ${event.hangoutLink}`);
+          console.log(`${startUTC} | ${event.summary.padEnd(35)} | ${event.hangoutLink}`);
           ind++;
           url[ind] = {};
           url[ind].url = `${event.hangoutLink}`;
@@ -99,7 +101,6 @@ function listEvents(auth) {
     }
   );
   listen();
-
 }
 let firstTimeRun = false;
 let pos = 1;
@@ -107,8 +108,7 @@ function showNextEvent(){
   nextEvent = new Date(url[pos].startTime)
   nextEventHour = nextEvent.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   nextEventDate = nextEvent.toDateString()
-  console.log(`\nThe next event is:\n${nextEventDate} - ${nextEventHour}\n${url[pos].summary} | ${url[pos].url}`)
-  
+  console.log(`\nThe next event is:\n${nextEventDate} - ${nextEventHour}\n${url[pos].summary} | ${url[pos].url}`); 
 }
 
 function showAllEvents(){
