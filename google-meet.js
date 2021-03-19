@@ -6,10 +6,10 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 
 class GoogleMeet {
-  constructor(email, pass, head, strict) {
+  constructor(email, pass, headless, strict) {
     this.email = email;
     this.pass = pass;
-    this.head = head;
+    this.headless = headless;
     this.strict = strict;
     this.browser;
     this.page;
@@ -18,7 +18,7 @@ class GoogleMeet {
     try {
       // Open browser
       this.browser = await puppeteer.launch({
-        headless: this.head,
+        headless: this.headless,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -48,20 +48,19 @@ class GoogleMeet {
 
       await this.page.goto(url);
 
-      console.log('inside meet page');
+      console.log('  Disabling audio and video');
       await this.page.waitForTimeout(7000);
       try {
         await this.page.click('div.IYwVEf.HotEze.uB7U9e.nAZzG');
       } catch (e) {
-        console.log('\naudio seems to disabled already');
-        console.log(e);
+       // console.log('    Audio disabled already');
+        
       }
       await this.page.waitForTimeout(1000);
       try {
         await this.page.click('div.IYwVEf.HotEze.nAZzG');
       } catch (e) {
-        console.log('\nvideo seems to be disabled already');
-        console.log(e);
+        console.log('    Video disabled already');
       }
 
       // sanity check (connect only if both audio and video are muted) :P
@@ -79,11 +78,10 @@ class GoogleMeet {
           );
           return;
         }
-        console.log('all set!!');
+        console.log('  Audio and video disabled');
       }
 
       await this.page.waitForTimeout(1000);
-      console.log('clicking on join');
       await this.page.click('span.NPEfkd.RveJvd.snByac');
 
       console.log('Successfully joined/Sent join request');

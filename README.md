@@ -19,6 +19,8 @@ The first time you run the sample, it will prompt you to authorize access:
 - Follow the on-screen instructions,
 - Copy the code you're given, paste it into the command-line prompt, and press `Enter`.
 
+- If you want to see the bot in action(Logging in, joining etc.) edit this variable `headless = false` in app.js
+
 Part of this bot is based on this repository\(joining the meetings and leaving them\) https://github.com/AmanRaj1608/Google-Meet-Scheduler
 
 ## License

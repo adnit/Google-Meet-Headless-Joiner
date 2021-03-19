@@ -8,10 +8,10 @@ const { setInterval } = require('timers');
 let email = process.env.EMAIL;
 let password = process.env.PASSWORD;
 
-let head = true;
+let headless = false;
 let strict = true;
 
-obj = new GoogleMeet(email, password, head, strict);
+obj = new GoogleMeet(email, password, headless, strict);
 
 let url = {};
 let ind = 0;
@@ -83,12 +83,15 @@ function listEvents(auth) {
         events.map((event, i) => {
           const start = event.start.dateTime || event.start.date;
           const end = event.end.dateTime || event.start.date;
-          console.log(`${start} - ${event.summary} - ${event.hangoutLink}`);
+          let startUTC = new Date(start).toDateString();
+          console.log(`${startUTC} | ${event.summary} | ${event.hangoutLink}`);
           ind++;
           url[ind] = {};
           url[ind].url = `${event.hangoutLink}`;
           url[ind].startTime = Date.parse(`${start}`);
           url[ind].endTime = Date.parse(`${end}`);
+          url[ind].summary = `${event.summary}`
+          firstTimeRun = true;
         });
       } else {
         console.log('No upcoming events found.');
@@ -96,25 +99,54 @@ function listEvents(auth) {
     }
   );
   listen();
+
+}
+let firstTimeRun = false;
+let pos = 1;
+function showNextEvent(){
+  nextEvent = new Date(url[pos].startTime)
+  nextEventHour = nextEvent.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  nextEventDate = nextEvent.toDateString()
+  console.log(`\nThe next event is:\n${nextEventDate} - ${nextEventHour}\n${url[pos].summary} | ${url[pos].url}`)
+  
 }
 
+function showAllEvents(){
+  let startTime;
+  for(i in url){
+    startTime = new Date(url[i].startTime).toDateString();
+    console.log(`${startTime} | ${url[i].summary} | ${url[i].url}`)
+  }
+}
 function listen() {
   setInterval(() => {
+    while(firstTimeRun){
+      showNextEvent();
+      firstTimeRun = false;
+    }
     if (Object.keys(url).length < 5) {
       checkEvents();
+      firstTimeRun = true;
     }
     for (x in url) {
       if (url[x].startTime < Date.now()) {
-        console.log(`Request for joining meet ${url[x].url}`);
+        console.clear()
+        var start = new Date(url[x].startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+        var end = new Date(url[x].endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+        console.log(`\nJoining: ${url[x].summary} | ${start} - ${end} | ${url[x].url}`);
         obj.schedule(url[x].url);
         url[x].startTime = url[x].endTime + 2000;
       }
       if (url[x].endTime < Date.now()) {
-        console.log(`Request for leaving meet ${url[x].url}`);
+        console.log(`\nLeaving: ${url[x].summary}`);
         obj.end();
+        console.log(`Left: ${url[x].summary} successfully\n`);
         delete url[x];
+        pos++;
+        showAllEvents();
+        showNextEvent();
       }
     }
-  }, 10000);
+  }, 1000);
   console.log(`App running`);
 }
